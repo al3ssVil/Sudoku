@@ -5,47 +5,29 @@
 class Sudoku
 {
 private:
-	int** matrice;
+	int** m_matrix;
 	int vector[10] = { 0 };
-	int** solutie;
+	int** solution;
 public:
-	void vectorul()
+	void InitializeVector()
 	{
-		/*std::cout << "Da ti valori de la 1 la 9 aleator\n";
-		for (int i = 1; i <= 9; i++)
-			std::cin >> vector[i];*/
 		for (int i = 1; i <= 9; ++i)
 		{
 			vector[i] = i;
 		}
 		std::random_shuffle(vector + 1, vector + 10);
 	}
-	void alocareMatrice()
+	void MatrixAllocation()
 	{
-		matrice = new int* [9];
+		m_matrix = new int* [9];
 		for (int i = 0; i < 9; i++)
 		{
-			matrice[i] = new int[9];
+			m_matrix[i] = new int[9];
 			for (int j = 0; j < 9; j++)
-				matrice[i][j] = 0;
+				m_matrix[i][j] = 0;
 		}
 	}
-	void afisareSudoku()
-	{
-		for (int i = 0; i < 9; i++)
-		{
-			if (i == 3 || i == 6)
-				std::cout << "-------------------" << '\n';
-			for (int j = 0; j < 9; j++)
-			{
-				if (j == 3 || j == 6)
-					std::cout << "|";
-				std::cout << matrice[i][j] << ' ';
-			}
-			std::cout << std::endl;
-		}
-	}
-	void afisareSolutie()
+	void DisplaySudoku()
 	{
 		for (int i = 0; i < 9; i++)
 		{
@@ -55,38 +37,53 @@ public:
 			{
 				if (j == 3 || j == 6)
 					std::cout << "|";
-				std::cout << solutie[i][j] << ' ';
+				std::cout << m_matrix[i][j] << ' ';
 			}
 			std::cout << std::endl;
 		}
 	}
-	bool verificare(int n, int m, int numar)
+	void DisplaySolution()
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			if (i == 3 || i == 6)
+				std::cout << "-------------------" << '\n';
+			for (int j = 0; j < 9; j++)
+			{
+				if (j == 3 || j == 6)
+					std::cout << "|";
+				std::cout << solution[i][j] << ' ';
+			}
+			std::cout << std::endl;
+		}
+	}
+	bool Check(int n, int m, int number)
 	{
 		for (int i = 0; i < n; i++)
-			if (numar == matrice[i][m])
+			if (number == m_matrix[i][m])
 				return false;
 		for (int i = 0; i < m; i++)
-			if (numar == matrice[n][i])
+			if (number == m_matrix[n][i])
 				return false;
-		int startLinie = n - n % 3;
-		int startColoana = m - m % 3;
+		int startRow = n - n % 3;
+		int startColumn = m - m % 3;
 		for (int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < 3; j++)
 			{
-				if (numar == matrice[startLinie + i][startColoana + j])
+				if (number == m_matrix[startRow + i][startColumn + j])
 					return false;
 			}
 		}
 		return true;
 	}
-	bool findEmptyCell(int& i, int& j)
+	bool FindEmptyCell(int& i, int& j)
 	{
 		for (i = 0; i < 9; i++)
 		{
 			for (j = 0; j < 9; j++)
 			{
-				if (matrice[i][j] == 0)
+				if (m_matrix[i][j] == 0)
 				{
 					return true;
 				}
@@ -94,115 +91,115 @@ public:
 		}
 		return false;
 	}
-	bool solveSudoku()
+	bool SolveSudoku()
 	{
 		int i, j;
-		if (!findEmptyCell(i, j))
+		if (!FindEmptyCell(i, j))
 		{
 			return true;
 		}
 		for (int k = 1; k <= 9; k++)
 		{
-			if (verificare(i, j, vector[k]))
+			if (Check(i, j, vector[k]))
 			{
-				matrice[i][j] = vector[k];
-				if (solveSudoku())
+				m_matrix[i][j] = vector[k];
+				if (SolveSudoku())
 				{
 					return true;
 				}
 				else
-					matrice[i][j] = 0;
+					m_matrix[i][j] = 0;
 			}
 		}
 		return false;
 	}
-	void eliminare()
+	void Remove()
 	{
-		solutie = new int* [9];
+		solution = new int* [9];
 		for (int i = 0; i < 9; i++)
 		{
-			solutie[i] = new int[9];
+			solution[i] = new int[9];
 			for (int j = 0; j < 9; j++)
-				solutie[i][j] = matrice[i][j];
+				solution[i][j] = m_matrix[i][j];
 		}
-		int alegere;
-		std::cout << "Alege nivelul e dificultate: 1.usor, 2. mediu, 3. greu\n";
-		std::cin >> alegere;
-		switch (alegere)
+		int choice;
+		std::cout << "Choose the difficulty level:\n 1. Easy\n 2. Medium\n 3. Hard\n";
+		std::cin >> choice;
+		switch (choice)
 		{
 		case 1:
 		{
-			int eliminare = rand() % 6 + 43;
-			for (int i = 0; i < eliminare; i++)
+			int remove = rand() % 6 + 43;
+			for (int i = 0; i < remove; i++)
 			{
 				int row = rand() % 9;
 				int coloana = rand() % 9;
-				solutie[row][coloana] = 0;
+				solution[row][coloana] = 0;
 			}
 			break;
 		}
 		case 2:
 		{
-			int eliminare = rand() % 5 + 50;
-			for (int i = 0; i < eliminare; i++)
+			int remove = rand() % 5 + 50;
+			for (int i = 0; i < remove; i++)
 			{
 				int row = rand() % 9;
 				int coloana = rand() % 9;
-				solutie[row][coloana] = 0;
+				solution[row][coloana] = 0;
 			}
 			break;
 		}
 		case 3:
 		{
-			int eliminare = rand() % 3 + 56;
-			for (int i = 0; i < eliminare; i++)
+			int remove = rand() % 3 + 56;
+			for (int i = 0; i < remove; i++)
 			{
 				int row = rand() % 9;
 				int coloana = rand() % 9;
-				solutie[row][coloana] = 0;
+				solution[row][coloana] = 0;
 			}
 			break;
 		}
 		default:
-			std::cout << "Valoare invalida\n";
-			eliminare();
+			std::cout << "Invalid value\n";
+			Remove();
 		}
 	}
-	void completare()
+	void Filling()
 	{
-		int greseli = 0;
-		while (matrice != solutie)
+		int mistakes = 0;
+		while (m_matrix != solution)
 		{
 			int i, j, val;
-			std::cout << "Introduceti valoarea ";
+			std::cout << "Enter the value: ";
 			std::cin >> val;
-			std::cout << "Pe linia ";
+			std::cout << "On the line: ";
 			std::cin >> i;
-			std::cout << "Pe coloana ";
+			std::cout << "On the column: ";
 			std::cin >> j;
-			if (matrice[i - 1][j - 1] == val)
+			if (m_matrix[i - 1][j - 1] == val)
 			{
-				solutie[i - 1][j - 1] = val;
-				afisareSolutie();
+				solution[i - 1][j - 1] = val;
+				DisplaySolution();
 			}
 			else
 			{
-				std::cout << "Ai gresit! Incearca iar\n";
-				greseli++;
+				std::cout << "You made a mistake! Try again.\n";
+				mistakes++;
 			}
 		}
-		std::cout << "Felicitari! Ai rezolvat Sudokul! Numarul de greseli:";
-		std::cin >> greseli;
+		std::cout << "Congratulations! You solved the Sudoku!\n Number of mistakes:";
+		std::cin >> mistakes;
 	}
 };
 int main()
 {
 	srand(time(NULL));
 	Sudoku sudoku;
-	sudoku.alocareMatrice();
-	sudoku.vectorul();
-	sudoku.solveSudoku();
-	sudoku.eliminare();
-	sudoku.afisareSolutie();
-	sudoku.completare();
+	sudoku.MatrixAllocation();
+	sudoku.InitializeVector();
+	sudoku.SolveSudoku();
+	sudoku.Remove();
+	sudoku.DisplaySolution();
+	sudoku.Filling();
 }
