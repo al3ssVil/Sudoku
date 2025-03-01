@@ -20,12 +20,13 @@ The program generates Sudoku puzzles at the following difficulty levels:
 
 1. **Starting the Game**: When you start the game, you can select a difficulty level.
    
- ![image](https://github.com/user-attachments/assets/b484cc4c-c63c-4fd5-bce9-c3cfc929c1c8)
+![image](https://github.com/user-attachments/assets/689ea3f4-a3db-41be-a3dd-e052fc1110db)
 
 2. **Generate Puzzle**: After selecting the difficulty, the program will generate a random Sudoku puzzle and display it.
 
 ### Example Puzzle (Easy):
-![image](https://github.com/user-attachments/assets/0455b8cc-f662-4a72-96bf-86ad608275d8)
+
+![image](https://github.com/user-attachments/assets/26ca73a1-6238-4527-8083-47e6234f2d13)
 
 ## Example Gameplay
 
